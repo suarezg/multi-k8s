@@ -32,8 +32,14 @@ jobs:
       - name: docker cli login
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: push images to docker hub
+      - name: push client image to docker hub
         run: docker push ginsuarez/multi-client
+
+      - name: push nginx image to docker hub
         run: docker push ginsuarez/multi-nginx
+
+      - name: push server image to docker hub
         run: docker push ginsuarez/multi-server
+      
+      - name: push worker image to docker hub
         run: docker push ginsuarez/multi-worker
