@@ -9,6 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build -f Dockerfile.dev -t ginsuarez/complex
-      - run: docker run -e CI=true ginsuarez/complex npm run test
+      
+      
+      - name: build react test image
+        run: docker build -f ./client/Dockerfile.dev -t ginsuarez/react-test ./client
+      
+      - name: run react-test on container
+        run: docker run -e CI=true ginsuarez/react-test npm test
+
+      - name: build production client
+        run: docker build -t ginsuarez/multi-client ./client
+
+      - name: build production nginx
+        run: docker build -t ginsuarez/multi-nginx ./nginx
+
+      - name: build production server
+        run: docker build -t ginsuarez/multi-server ./server
+
+      - name: build production worker
+        run: docker build -t ginsuarez/multi-worker ./worker 
+
+      - name: docker cli login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: push images to docker hub
+        run: docker push ginsuarez/multi-client
+        run: docker push ginsuarez/multi-nginx
+        run: docker push ginsuarez/multi-server
+        run: docker push ginsuarez/multi-worker
