@@ -44,9 +44,7 @@ jobs:
       - name: push worker image to docker hub
         run: docker push ginsuarez/multi-worker
 
-      - name: Deployment package
-        run: zip -r deploy.zip docker-compose.yml -x '*.git*'      
-
+    
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
         with:
@@ -57,4 +55,4 @@ jobs:
           existing_bucket_name: elasticbeanstalk-us-east-2-652178207511
           version_label: ${{ github.sha }}
           region: us-east-2
-          deployment_package: deploy.zip
+          deployment_package: docker-compose.yml
