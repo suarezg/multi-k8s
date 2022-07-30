@@ -43,3 +43,14 @@ jobs:
       
       - name: push worker image to docker hub
         run: docker push ginsuarez/multi-worker
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: multi-docker
+          environment: 'Multidocker-env'
+          existing_bucket_name: elasticbeanstalk-us-east-2-652178207511
+          version_label: ${{ github.sha }}
+          region: us-east-2
